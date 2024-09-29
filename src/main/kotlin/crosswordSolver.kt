@@ -18,7 +18,7 @@ fun main() {
                     "Вы выбрали режим: поиск по множеству букв\n" +
                             "Введите множество букв без пробелов и запятых:"
                 )
-                searchBySet(words, result)
+                searchBySet(words, result, countOfLetters)
                 break
             }
 
@@ -51,19 +51,19 @@ fun main() {
 }
 
 /**
- * Считывает количество букв и возвращает данное число
- * Делает проверку на валидность введеных данных
- * Если данные не валидны просит ввести снова
+ * Считывает количество букв
+ * Делает проверку, если данные не валидны просит ввести снова
+ * Возвращает количество букв
  */
 fun parseLettersCount(): Int {
     while (true) {
         println("Введите длину искомого слова:")
         try {
             val result = readln().toInt()
-            if (result <= 18) {
+            if (result in 3..18) {
                 return result
             } else {
-                println("Извините слова длиннее 18 букв мы не ищем, попробуйте снова")
+                println("Извините слова короче 3 и длиннее 18 букв мы не ищем, попробуйте снова")
 
             }
         } catch (e: Exception) {
@@ -107,8 +107,19 @@ fun searchByMask(words: List<String>, result: MutableList<String>, countOfLetter
  * Ищет слова по множеству букв
  * Возвращает список слов
  */
-fun searchBySet(words: List<String>, result: MutableList<String>) {
-    val search: Set<Char> = readln().toCharArray().toSet()
+fun searchBySet(words: List<String>, result: MutableList<String>, countOfLetters: Int) {
+    var search: Set<Char>
+
+
+    while (true) {
+        search = readln().toCharArray().filter { it.isLetter() }.toSet()
+        if (search.size == countOfLetters) {
+            break
+        } else {
+            println("Вы ввели больше букв чем длина слова, попробуйте снова: ")
+        }
+    }
+
 
     for (word in words) {
         if (search.all { it in word }) {
